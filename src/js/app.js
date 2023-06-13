@@ -1,23 +1,44 @@
+/* eslint-disable no-console */
 import Character from './character';
 
 class Team {
-  constructor(name, type, attack, defence) {
-    this.char = new Character(name, type, attack, defence);
+  constructor() {
     this.teamCollection = new Map();
-    this.teamCollection.set(this.char);
   }
 
-  getIterate() {
-    const values = this.teamCollection;
-    const iterator = values[Symbol.iterator]();
-    return iterator.next().value[0];
-    // console.log(iterator.next().value[0]);
+  addChar(char) {
+    this.teamCollection.set(char);
+  }
+
+  [Symbol.iterator]() {
+    const teamArray = [...this.teamCollection];
+    let i = 0;
+    return {
+      next() {
+        if (i !== teamArray.length) {
+          i += 1;
+          return {
+            done: false,
+            value: teamArray[i],
+          };
+        }
+        return {
+          done: true,
+        };
+      },
+    };
   }
 }
 
-new Team('Cartman', 'Bowman', 25, 25).getIterate();
-new Team('Stan', 'Daemon', 10, 40).getIterate();
-new Team('Kyle', 'Magician', 10, 40).getIterate();
-new Team('Kenny', 'Swordsman', 40, 10).getIterate();
-new Team('Butters', 'Undead', 25, 25).getIterate();
-new Team('Timmy', 'Zombie', 40, 10).getIterate();
+const teamCollection = new Team();
+teamCollection.addChar(new Character('Cartman', 'Bowman', 25, 25));
+teamCollection.addChar(new Character('Stan', 'Daemon', 10, 40));
+teamCollection.addChar(new Character('Kyle', 'Magician', 10, 40));
+teamCollection.addChar(new Character('Kenny', 'Swordsman', 40, 10));
+teamCollection.addChar(new Character('Butters', 'Undead', 25, 25));
+teamCollection.addChar(new Character('Timmy', 'Zombie', 40, 10));
+
+for (const char of teamCollection) {
+  // return char;
+  console.log(char);
+}
